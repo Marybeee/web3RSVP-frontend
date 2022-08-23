@@ -12,7 +12,7 @@ import formatTimestamp from "../../../utils/formatTimestamp";
 import Alert from "../../../components/Alert";
 
 // page where users can confirm attendees
-function PastEvent() {
+function PastEvent({ event }) {
   const { data: account } = useAccount();
 
   const [success, setSuccess] = useState(null);
