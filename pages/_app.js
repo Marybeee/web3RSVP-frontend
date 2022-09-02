@@ -7,6 +7,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
+import { ThemeProvider } from 'next-themes'
 
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
@@ -29,14 +30,16 @@ const wagmiClient = createClient({
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
-        <ApolloProvider client={client}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ApolloProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ThemeProvider>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains}>
+          <ApolloProvider client={client}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ApolloProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ThemeProvider>
   );
 }
