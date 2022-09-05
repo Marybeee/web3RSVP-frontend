@@ -1,7 +1,8 @@
+// import helper modules from web3storag and the path module
 import { Web3Storage, File, getFilesFromPath } from "web3.storage";
 const { resolve } = require("path");
 
-
+// function to handle incoming requests
 export default async function handler(req, res) {
     if (req.method === "POST") {
       return await storeEventData(req, res);
@@ -11,7 +12,9 @@ export default async function handler(req, res) {
         .json({ message: "Method not allowed", success: false });
     }
 }
-
+// called if incoming request is a POST
+// tries to get the event data from the request body and store the data
+// when succsess the CID will be returnd
 async function storeEventData(req, res) {
     const body = req.body;
     try {
@@ -25,6 +28,7 @@ async function storeEventData(req, res) {
     }
 } 
 
+//create a json file that includes metadata passed from the req.body object.
 async function makeFileObjects(body) {
     const buffer = Buffer.from(JSON.stringify(body));
   
@@ -38,7 +42,7 @@ async function makeFileObjects(body) {
 function makeStorageClient() {
     return new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN });
 }
-
+//store json file to Web3.storage and return CID
 async function storeFiles(files) {
     const client = makeStorageClient();
     const cid = await client.put(files);
