@@ -117,6 +117,7 @@ function Event({event}) {
               )}
             </div>
             <p>{event.description}</p>
+            <p>Special guest: {ethers.utils.parseBytes32String(event.specialGuest)}</p>
           </div>
           <div className="max-w-xs w-full flex flex-col gap-4 mb-6 lg:mb-0">
             {event.eventTimestamp > currentTimestamp ? (
@@ -202,6 +203,7 @@ export async function getServerSideProps(context) {
           eventTimestamp
           maxCapacity
           deposit
+          specialGuest
           totalRSVPs
           totalConfirmedAttendees
           imageURL

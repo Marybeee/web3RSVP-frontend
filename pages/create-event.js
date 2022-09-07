@@ -21,18 +21,18 @@ export default function CreateEvent() {
   const [refund, setRefund] = useState("");
   const [eventLink, setEventLink] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const [specialGuest, setSpecialGuest] = useState("");
 
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    
     const body = {
       name: eventName,
       description: eventDescription,
       link: eventLink,
       image: getRandomImage(),
     };
-
 
     try {
       const response = await fetch("/api/store-event-data", {
@@ -45,6 +45,7 @@ export default function CreateEvent() {
       } else {
         console.log("Form successfully submitted!");
         let responseJSON = await response.json();
+        
         await createEvent(responseJSON.cid);
       }
       // check response, if success is false, dont take them to success page
@@ -65,12 +66,16 @@ export default function CreateEvent() {
         let eventDateAndTime = new Date(`${eventDate} ${eventTime}`);
         let eventTimestamp = eventDateAndTime.getTime();
         let eventDataCID = cid;
-  
+        let specialGuestInBytes = ethers.utils.formatBytes32String(`${specialGuest}`);
+        //console.log(`${specialGuest}`);
+        console.log("Specialguest in bytes32:", specialGuestInBytes);
+
         const txn = await rsvpContract.createNewEvent(
           eventTimestamp,
           deposit,
           maxCapacity,
           eventDataCID,
+          specialGuestInBytes,
           { gasLimit: 900000 }
         );
         
@@ -288,6 +293,7 @@ export default function CreateEvent() {
                   />
                 </div>
               </div>
+
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
                 <label
                   htmlFor="about"
@@ -309,6 +315,27 @@ export default function CreateEvent() {
                   />
                 </div>
               </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                <label
+                  htmlFor="specialGuest"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Special Guest
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <input
+                    id="special-guest"
+                    name="special-guest"
+                    type="text"
+                    className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
+                    required
+                    value={specialGuest}
+                    onChange={(e) => setSpecialGuest(e.target.value)}
+                  />
+                </div>
+              </div>
+
             </div>
             <div className="pt-5">
               <div className="flex justify-end">
